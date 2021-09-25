@@ -2,15 +2,26 @@
     GO
     USE Cafeteria;
     GO
+	
+	/* Vamos criar a tabela cafeteria, caso deseja
+	ver nome, cnpj, endere√ßoloja */
+        CREATE TABLE CAFETERIA(
+        Nome VARCHAR(50) NOT NULL,
+	CPNJ INT(14) NOT NULL,
+	ENDERECO VARCHAR(100) NOT NULL,
+        );
+
+        INSERT INTO CAFETERIA VALUES
+	('Cafeteria - CoffeMe ', 1231230 , 'Rua Da energia com cafeina');  
 
 
 	 /* Vamos criar uma tabela para clientes */
-    CREATE TABLE CLIENTES(
-		ID_CLIENTE_CPF INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+        CREATE TABLE CLIENTES(
+        ID_CLIENTE_CPF INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
         NOME VARCHAR(50) NOT NULL,
-		ENDERECO VARCHAR(100) NOT NULL,
-		TELEFONE INT NOT NULL,
-    );
+        ENDERECO VARCHAR(100) NOT NULL,
+        TELEFONE INT NOT NULL,
+        );
 
 	/* Vamos criar uma tabela para pedidos dos clientes*/
 	CREATE TABLE PEDIDOS(
@@ -32,7 +43,7 @@
 	);
 
 	/* Vamos criar uma tabela de insumos para depois fazer um update,
-	esses insumos ser„o utilizados na hora de fazer um produto*/
+	esses insumos ser√£o utilizados na hora de fazer um produto*/
 	CREATE TABLE INSUMOS(
 		ID_INSUMO INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 		INSUMO_NOME VARCHAR(20),
@@ -44,11 +55,11 @@
 	/* Vamos colocar alguns insumos de exemplo, tem dezenas
 	porem colocamos apenas alguns*/
 	INSERT INTO INSUMOS VALUES
-	('Leite', 120 , 'L', 2.36), ('AÁucar', 30000 , 'G', 0.0359),
-	('CafÈ Especial Gr„o', 12000 , 'G', 0.059), ('Canela em pÛ', 300 , 'G', 0.10);
+	('Leite', 120 , 'L', 2.36), ('A√ßucar', 30000 , 'G', 0.0359),
+	('Caf√© Especial Gr√£o', 12000 , 'G', 0.059), ('Canela em p√≥', 300 , 'G', 0.10);
 
-	/* Vamos criar uma tabela para os produtos que os clientes v„o comprar 
-	nesse caso ser· cafÈs*/
+	/* Vamos criar uma tabela para os produtos que os clientes v√£o comprar 
+	nesse caso ser√° caf√©s*/
 	CREATE TABLE PRODUTOS(
 		ID_PRODUTO INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 		PRODUTO_NOME VARCHAR(30),
@@ -57,14 +68,14 @@
 		PRODUTO_QUANTIDADETOTAL INT
 	);
              
-	/* Inserimos os produtos / cafÈs  */
+	/* Inserimos os produtos / caf√©s  */
 	INSERT INTO PRODUTOS VALUES
-	('CAF… MOCCHA','M…DIO', 12.50 , 0),
-	('CAF… EXPRESSO','PEQUENO', 6 , 0), ( 'CAF… AMERICANO','M…DIO', 7 , 0),
-	('CAF… CAPPUCCINO','GRANDE', 13.50 , 0), ('CAF… DUPLO','M…DIO', 8 , 0);
+	('CAF√â MOCCHA','M√âDIO', 12.50 , 0),
+	('CAF√â EXPRESSO','PEQUENO', 6 , 0), ( 'CAF√â AMERICANO','M√âDIO', 7 , 0),
+	('CAF√â CAPPUCCINO','GRANDE', 13.50 , 0), ('CAF√â DUPLO','M√âDIO', 8 , 0);
 
-	/* Vamos criar uma tabela de itens do cafÈ,
-	est· tabela relaciona os insumos que usamos para fazer cada cafÈ*/
+	/* Vamos criar uma tabela de itens do caf√©,
+	est√° tabela relaciona os insumos que usamos para fazer cada caf√©*/
 	CREATE TABLE ITEMCAFE(
 	ID_ITEMCAFE INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 	ITEM_QUANTIDADEINSUMO Decimal,
@@ -72,24 +83,24 @@
 	ITEM_PRODUTOFK INT, 
 	);
 
-	/* Vamos relacionar itens do cafÈ em produtos e insumos*/
+	/* Vamos relacionar itens do caf√© em produtos e insumos*/
 
 	ALTER TABLE ITEMCAFE ADD CONSTRAINT ITEMPRODUTOFK FOREIGN KEY (ITEM_PRODUTOFK) REFERENCES PRODUTOS (ID_PRODUTO);
 	ALTER TABLE ITEMCAFE ADD CONSTRAINT ITEMINSUMOFK FOREIGN KEY (ITEM_INSUMOFK) REFERENCES INSUMOS (ID_INSUMO);
 
 
-	/* Vamos inserir quais insumos o cafÈ " x " utiliza
-	neste exemplo inserimos os insumos do cafÈ 1 - Moccha
-	Observe que: primeiro valor È a quantidade de insumo
-	o segundo valor È qual insumo
-	e o terceiro valor È qual cafÈ*/
+	/* Vamos inserir quais insumos o caf√© " x " utiliza
+	neste exemplo inserimos os insumos do caf√© 1 - Moccha
+	Observe que: primeiro valor √© a quantidade de insumo
+	o segundo valor √© qual insumo
+	e o terceiro valor √© qual caf√©*/
 
 
 	INSERT INTO ITEMCAFE VALUES(0.2 , 1 ,1), (3,2,1), (20,3,1), (4,4,1);
 
-    /* Vamos criar uma visualizaÁ„o para que possamos
+    /* Vamos criar uma visualiza√ß√£o para que possamos
 	ver os ingredientes que tem no estoque e suas quantidades.
-	Essa visualizaÁ„o È importante, pois ao criar um cafÈ 
+	Essa visualiza√ß√£o √© importante, pois ao criar um caf√© 
 	iremos diminuir os itens do estoque. */
 
 	CREATE VIEW ESTOQUE AS SELECT INSUMO_NOME as 'Produto', INSUMO_QUANTIDADE as 'Quantidade', INSUMO_UNIDADEMEDIDA as 'UnidadeMedida' FROM INSUMOS;
@@ -108,9 +119,9 @@
 
 
 	/* Vamos criar uma procedure diminuir os insumos, ingredientes
-	cada vez que um cafÈ È feito e comprado.
-	Observe que È possÌvel colocar update para todos os cafÈs/ produtos 
-	que vocÍ adicionou, porÈm para exemplo utilizamos apenas o cafÈ 1 - Moccha*/
+	cada vez que um caf√© √© feito e comprado.
+	Observe que √© poss√≠vel colocar update para todos os caf√©s/ produtos 
+	que voc√™ adicionou, por√©m para exemplo utilizamos apenas o caf√© 1 - Moccha*/
 	CREATE PROCEDURE abaixaInsumo (@CAFE INT)
 	AS
 		BEGIN
@@ -152,7 +163,7 @@
 
 
 	/* Vamos criar uma procedure para registra esse pedido,
-	verificar qual o seu preÁo final e alocar de quem foi o pedido 
+	verificar qual o seu pre√ßo final e alocar de quem foi o pedido 
 	por id cpf */
 
 	CREATE PROCEDURE registraPedido(@ID INT, @CPF INT)
@@ -177,7 +188,7 @@
 	EXEC procuraCliente @CPF = 546111;
 
 
-	/* Vamos chamar a view de estoque para ver como est·
+	/* Vamos chamar a view de estoque para ver como est√°
 	os insumos antes de fazer um pedido */
 	SELECT * FROM ESTOQUE;
 
@@ -185,13 +196,13 @@
 	EXEC anotaItensPedido @IDPROD = 1, @QTDPROD = 1, @IDPED = 1;
 	EXEC registraPedido @ID = 1, @CPF = 546111;
 	
-	/* Vamos chamar as tabelas para ver como est· registrado
+	/* Vamos chamar as tabelas para ver como est√° registrado
 	os pedidos e itens desses pedidos */
 	SELECT * FROM PEDIDOS;
 	SELECT * FROM ITEMPEDIDOS;
 
 	/* Por fim, chamamos a procedure de diminuir os insumos
-	e vemos como ficou o estoque apÛs o pedido do item
-	nesse caso cafÈ 1 */
+	e vemos como ficou o estoque ap√≥s o pedido do item
+	nesse caso caf√© 1 */
 	EXEC abaixaInsumo @CAFE = 1;
 	SELECT * FROM ESTOQUE;
